@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
-<script src = "https://d3js.org/d3.v3.min.js"></script>
+<script src = "./d3.js"></script>
+<script src='./relative/path/to/big.js'></script>
 </head>
 <body>
 <button onclick="parse()" value = "move" id = "pyth-button">Generate example</button>
@@ -263,17 +264,19 @@ function dist(pointOne, pointTwo){
   return Math.sqrt(Math.pow(pointOne[0] - pointTwo[0],2) + Math.pow(pointOne[1] - pointTwo[1],2));
 }
 
-function findHyp(pointOne, pointTwo, pointThree, returnLegs){
+function findHyp(pointOne, pointTwo, pointThree){
   curMax = dist(pointOne, pointTwo);
   start = pointOne;
   end = pointTwo;
   other = pointThree;
   if(dist(pointTwo, pointThree) > curMax){
+    curMax = dist(pointTwo, pointThree)
     start = pointTwo;
     end = pointThree;
     other = pointOne;
   }
   if(dist(pointThree, pointOne) > curMax){
+    curMax = dist(pointThree, pointOne)
     start = pointThree;
     end = pointOne;
     other = pointTwo;
