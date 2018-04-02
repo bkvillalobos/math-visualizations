@@ -1,20 +1,52 @@
 <!DOCTYPE html>
+<style>
+.btn{
+    font-family: Verdana;
+  	font-size:14px;
+    display: inline-block;
+    text-decoration: none;
+    background: #ff8181;
+    color: #FFF;
+    width: 120px;
+    height: 60px;
+    line-height: 20px;
+    border-radius: 100%;
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+    border-bottom: solid 3px #bd6565;
+    transition: .4s;
+    margin: 0 auto;
+}
+
+.btn:active{
+    -ms-transform: translateY(2px);
+    -webkit-transform: translateY(2px);
+    transform: translateY(2px);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+    border-bottom: none;
+}
+</style>
 <head>
-<script src = "./d3.js"></script>
-<script src='./relative/path/to/big.js'></script>
+<script src = "./s/d3.js"></script>
 </head>
 <body>
-<button onclick="parse()" value = "move" id = "pyth-button">Generate example</button>
-<div id="pyth-viz">
-this is a div
+<div align="center">
+<button onclick="parse()"
+        value="move"
+        id="pyth-button"
+        class="btn">Start Demo</button>
+      </div>
+<div id="pythagorean-viz" align="center">
 </div>
 </body>
 <script>
 var width = 1000;
 var height = 250;
 var status = "move";
-var container = d3.select("#pyth-viz").append("svg").attr("width", width).attr("height", height);
-var text = container.append("text")
+var container = d3.select("#pythagorean-viz").append("svg").attr("width", width).attr("height", height);
+/*var text = container.append("text")
                     .text("Start Demo")
                     .attr("x", 10)
                     .attr("y", 20)
@@ -22,9 +54,9 @@ var text = container.append("text")
                     .attr("font-size", "20px")
                     .attr("font-weight", "bold")
                     .attr("fill", "black");
-text.on("click", parse);
-text.on("mouseover", function(){text.attr("fill", "blue"); });
-text.on("mouseout", function(){text.attr("fill", "black");});
+text.on("click", parse);*/
+//text.on("mouseover", function(){text.attr("fill", "blue"); });
+//text.on("mouseout", function(){text.attr("fill", "black");});
 var drawLines = d3.svg.line()
                     .x(function(d){ return d.x; })
                     .y(function(d){ return d.y; })
@@ -47,33 +79,39 @@ function resetVars(){
   cText.remove();
   cText = null;
   d3.selectAll("text").remove();
+  var button = document.getElementById("pyth-button");
+  button.innerHTML = "Start Demo"
 }
 
 function parse(){
   if(status =="first"){
     status = "square";
-    text.text("Square each leg");
+    //text.text("Square each leg");
     nextTransition(one_length, two_length, hyp_length);
   }
   if(status == "draw" || status == "first"){
     status = "move";
     resetVars();
-    text = container.append("text")
+    var button = document.getElementById("pyth-button");
+    button.innerHTML = "Start Demo"
+    /*text = container.append("text")
                     .text("Start Demo")
                     .attr("x", 10)
                     .attr("y", 20)
                     .attr("font-family", "Calibri")
                     .attr("font-size", "20px")
                     .attr("font-weight", "bold")
-                    .attr("fill", "black");
-    text.on("click", parse);
-    text.on("mouseover", function(){text.attr("fill", "blue"); });
-    text.on("mouseout", function(){text.attr("fill", "black");});
+                    .attr("fill", "black");*/
+    //text.on("click", parse);
+    //text.on("mouseover", function(){text.attr("fill", "blue"); });
+    //text.on("mouseout", function(){text.attr("fill", "black");});
     generateTri();
   }
   else if(status == "move"){
     status = "square";
-    text.text("Square each leg");
+    //text.text("Square each leg");
+    var button = document.getElementById("pyth-button");
+    button.innerHTML = "Square Legs"
     example();
     nextTransition(one_length, two_length, hyp_length);
   }
@@ -105,7 +143,9 @@ function parse(){
             .attr("font-size", "12px")
             .attr("font-weight", "bold")
             .attr("fill", "red");
-    text.text("Generate another example");
+    var button = document.getElementById("pyth-button");
+    button.innerHTML = "New Example"
+    //text.text("Generate another example");
     denom = Math.pow(hyp_length,.7);
     one_length = one_length*one_length/denom;
     two_length = two_length*two_length/denom;
@@ -182,7 +222,8 @@ function example(){
   two_length = Math.round(dist([legs.slice(4,5)[0].x, legs.slice(4,5)[0].y],
                   [legs.slice(5)[0].x, legs.slice(5)[0].y]));
 
-  // this piece of math deals with the inevitable rounding error
+  // this piece of math deals with the floating pt arithmetic error
+  // should probably use Big.js library instead
   if(Math.pow(one_length,2) + Math.pow(two_length,2) != Math.pow(hyp_length,2)){
     hyp_length = Math.sqrt(Math.pow(hyp_length,2) + ((Math.pow(one_length,2) + Math.pow(two_length,2))) - Math.pow(hyp_length,2));
   }
